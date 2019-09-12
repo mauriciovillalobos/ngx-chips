@@ -25,9 +25,9 @@ const navigator = typeof window !== 'undefined' ? window.navigator : {
 const isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
 
 @Component({
-    selector: "tag",
-    templateUrl: "./tag.template.html",
-    styleUrls: ["./tag-component.style.scss"]
+    selector: 'tag',
+    templateUrl: './tag.template.html',
+    styleUrls: ['./tag-component.style.scss']
 })
 export class TagComponent {
     /**
@@ -130,7 +130,7 @@ export class TagComponent {
      * @name readonly {boolean}
      */
     public get readonly(): boolean {
-        return typeof this.model !== "string" && this.model.readonly === true;
+        return typeof this.model !== 'string' && this.model.readonly === true;
     }
 
     /**
@@ -141,18 +141,18 @@ export class TagComponent {
     /**
      * @name moving
      */
-    @HostBinding("class.moving")
+    @HostBinding('class.moving')
     public moving: boolean;
 
     /**
      * @name rippleState
      */
-    public rippleState = "none";
+    public rippleState = 'none';
 
     /**
      * @name ripple {TagRipple}
      */
-    @ViewChild(TagRipple)
+    @ViewChild(TagRipple, { static: false })
     public ripple: TagRipple;
 
     constructor(
@@ -201,7 +201,7 @@ export class TagComponent {
      * @name keydown
      * @param event
      */
-    @HostListener("keydown", ["$event"])
+    @HostListener('keydown', ['$event'])
     public keydown(event: EventLike): void {
         if (this.editing) {
             if (event.keyCode === 13) {
@@ -217,9 +217,9 @@ export class TagComponent {
      */
     public blink(): void {
         const classList = this.element.nativeElement.classList;
-        classList.add("blink");
+        classList.add('blink');
 
-        setTimeout(() => classList.remove("blink"), 50);
+        setTimeout(() => classList.remove('blink'), 50);
     }
 
     /**
@@ -246,7 +246,7 @@ export class TagComponent {
 
         const value: string = event.target.innerText;
         const result =
-            typeof this.model === "string"
+            typeof this.model === 'string'
                 ? value
                 : { ...this.model, [this.displayBy]: value };
 
@@ -258,7 +258,7 @@ export class TagComponent {
      * @param item
      */
     public getDisplayValue(item: TagModel): string {
-        return typeof item === "string" ? item : item[this.displayBy];
+        return typeof item === 'string' ? item : item[this.displayBy];
     }
 
     /**
@@ -287,7 +287,7 @@ export class TagComponent {
         const input = this.getContentEditableText();
 
         this.editing = false;
-        classList.remove("tag--editing");
+        classList.remove('tag--editing');
 
         if (!input) {
             this.setContentEditableText(this.model);
@@ -317,7 +317,7 @@ export class TagComponent {
     private getContentEditableText(): string {
         const input = this.getContentEditable();
 
-        return input ? input.innerText.trim() : "";
+        return input ? input.innerText.trim() : '';
     }
 
     /**

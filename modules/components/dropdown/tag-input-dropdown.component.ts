@@ -2,37 +2,35 @@ import {
     Component,
     ContentChildren,
     EventEmitter,
-    forwardRef,
     HostListener,
     Injector,
     Input,
     QueryList,
     TemplateRef,
-    Type,
     ViewChild,
+    AfterViewInit,
 } from '@angular/core';
 
 // rx
 import { Observable } from 'rxjs';
-import { map, filter, first, debounceTime } from 'rxjs/operators';
+import { filter, first, debounceTime } from 'rxjs/operators';
 
 import { Ng2Dropdown, Ng2MenuItem } from 'ng2-material-dropdown';
-import { OptionsProvider } from '../../core/providers/options-provider';
-import { TagInputComponent } from '../tag-input/tag-input';
-import { TagInputDropdownOptions } from '../../defaults';
+import { defaults } from '../../defaults';
 import { TagModel } from '../../core/accessor';
+import { TagInputComponent } from '../tag-input/tag-input';
 
-const defaults: Type<TagInputDropdownOptions> = forwardRef(() => OptionsProvider.defaults.dropdown);
 
 @Component({
     selector: 'tag-input-dropdown',
     templateUrl: './tag-input-dropdown.template.html'
 })
-export class TagInputDropdown {
+export class TagInputDropdown implements AfterViewInit {
+
     /**
      * @name dropdown
      */
-    @ViewChild(Ng2Dropdown) public dropdown: Ng2Dropdown;
+    @ViewChild(Ng2Dropdown, { static: false }) public dropdown: Ng2Dropdown;
 
     /**
      * @name menuTemplate
@@ -43,18 +41,18 @@ export class TagInputDropdown {
     /**
      * @name offset
      */
-    @Input() public offset: string = new defaults().offset;
+    @Input() public offset: string = defaults.dropdown.offset;
 
     /**
      * @name focusFirstElement
      */
-    @Input() public focusFirstElement = new defaults().focusFirstElement;
+    @Input() public focusFirstElement = defaults.dropdown.focusFirstElement;
 
     /**
      * - show autocomplete dropdown if the value of input is empty
      * @name showDropdownIfEmpty
      */
-    @Input() public showDropdownIfEmpty = new defaults().showDropdownIfEmpty;
+    @Input() public showDropdownIfEmpty = defaults.dropdown.showDropdownIfEmpty;
 
     /**
      * @description observable passed as input which populates the autocomplete items
@@ -66,50 +64,50 @@ export class TagInputDropdown {
      * - desc minimum text length in order to display the autocomplete dropdown
      * @name minimumTextLength
      */
-    @Input() public minimumTextLength = new defaults().minimumTextLength;
+    @Input() public minimumTextLength = defaults.dropdown.minimumTextLength;
 
     /**
      * - number of items to display in the autocomplete dropdown
      * @name limitItemsTo
      */
-    @Input() public limitItemsTo: number = new defaults().limitItemsTo;
+    @Input() public limitItemsTo: number = defaults.dropdown.limitItemsTo;
 
     /**
      * @name displayBy
      */
-    @Input() public displayBy = new defaults().displayBy;
+    @Input() public displayBy = defaults.dropdown.displayBy;
 
     /**
      * @name identifyBy
      */
-    @Input() public identifyBy = new defaults().identifyBy;
+    @Input() public identifyBy = defaults.dropdown.identifyBy;
 
     /**
      * @description a function a developer can use to implement custom matching for the autocomplete
      * @name matchingFn
      */
-    @Input() public matchingFn: (value: string, target: TagModel) => boolean = new defaults().matchingFn;
+    @Input() public matchingFn: (value: string, target: TagModel) => boolean = defaults.dropdown.matchingFn;
 
     /**
      * @name appendToBody
      */
-    @Input() public appendToBody = new defaults().appendToBody;
+    @Input() public appendToBody = defaults.dropdown.appendToBody;
 
     /**
      * @name keepOpen
      * @description option to leave dropdown open when adding a new item
      */
-    @Input() public keepOpen = new defaults().keepOpen;
+    @Input() public keepOpen = defaults.dropdown.keepOpen;
 
     /**
      * @name dynamicUpdate
      */
-    @Input() public dynamicUpdate = new defaults().dynamicUpdate;
+    @Input() public dynamicUpdate = defaults.dropdown.dynamicUpdate;
 
     /**
     * @name zIndex
      */
-    @Input() public zIndex = new defaults().zIndex;
+    @Input() public zIndex = defaults.dropdown.zIndex;
 
     /**
      * list of items that match the current value of the input (for autocomplete)
@@ -157,9 +155,9 @@ export class TagInputDropdown {
     constructor(private readonly injector: Injector) {}
 
     /**
-     * @name ngOnInit
+     * @name ngAfterviewInit
      */
-    public ngOnInit(): void {
+    ngAfterViewInit(): void {
         this.onItemClicked().subscribe((item: Ng2MenuItem) => {
             this.requestAdding(item);
         });
