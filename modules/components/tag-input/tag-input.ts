@@ -894,7 +894,7 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
       }
 
       const tagComponents = this.tags.filter(tag => this.selectedTags.includes(tag.model));
-      return tagComponents.length && tagComponents.some(tag => tag.isFocused());
+      return !!(tagComponents.length && tagComponents.some(tag => tag.isFocused()));
     }
 
     private selectRange(item: TagModel): TagModel[] {
@@ -904,10 +904,7 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
         [start, end] = [end, start];
       }
 
-      // mdn array.slice;
-      console.log([start, end]);
       const slice = this.items.slice(start, (end + 1));
-      console.log(slice);
       return slice;
     }
 
