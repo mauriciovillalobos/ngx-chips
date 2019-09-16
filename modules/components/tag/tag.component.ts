@@ -85,12 +85,6 @@ export class TagComponent {
     public disabled = false;
 
     /**
-     * @name disabled
-     */
-    @Input()
-    public copyable = false;
-
-    /**
      * @name canAddTag
      */
     @Input()
