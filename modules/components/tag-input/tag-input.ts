@@ -582,8 +582,17 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
             const event = window.event as MouseEvent;
             if (this.isInSelection(item)) {
               if (event && (event.ctrlKey || event.metaKey)) {
-                // remove from selection
-                this.selectedTags = this.selectedTags.filter(tag => tag != item);
+                if (this.selectedTags.length > 1) {
+                  // remove from selection
+                  this.selectedTags = this.selectedTags.filter(tag => tag != item);
+
+                  // then select the first tag in the selection
+                  const tagComponent = this.tags.filter(tag => tag.model == this.selectedTags[0])[0];
+                  tagComponent.focus();
+                } else {
+                  // select only this
+                  this.selectedTags = [item];
+                }
               } else if (event && event.shiftKey) {
                 // select range
                 this.selectedTags = this.selectRange(item);
@@ -898,10 +907,16 @@ export class TagInputComponent extends TagInputAccessor implements OnInit, After
     }
 
     private selectRange(item: TagModel): TagModel[] {
-      let start = Math.min(...this.selectedTags.map(tag => this.items.indexOf(tag)));
-      let end = this.items.indexOf(item);
-      if (end < start) {
-        [start, end] = [end, start];
+      const indices = this.selectedTags.map(tag => this.items.indexOf(tag));
+      const min = Math.min(...indices);
+      const max = Math.max(...indices);
+      const selectedIndex = this.items.indexOf(item);
+
+      let start = min;
+      let end = selectedIndex;
+      if (selectedIndex < min) {
+        start = selectedIndex;
+        end = max;
       }
 
       const slice = this.items.slice(start, (end + 1));
